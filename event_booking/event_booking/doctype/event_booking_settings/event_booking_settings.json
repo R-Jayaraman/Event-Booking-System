@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-03-23 12:07:11.248141",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "cancellation_policy_days",
+  "default_tax_percentage",
+  "company_logo",
+  "max_advance_booking_days",
+  "email_alerts_enabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "cancellation_policy_days",
+   "fieldtype": "Int",
+   "label": "Cancellation Policy Days"
+  },
+  {
+   "fieldname": "default_tax_percentage",
+   "fieldtype": "Float",
+   "label": "Default Tax Percentage"
+  },
+  {
+   "fieldname": "company_logo",
+   "fieldtype": "Attach Image",
+   "label": "Company Logo"
+  },
+  {
+   "fieldname": "max_advance_booking_days",
+   "fieldtype": "Int",
+   "label": "Max Advance Booking Days"
+  },
+  {
+   "default": "0",
+   "fieldname": "email_alerts_enabled",
+   "fieldtype": "Check",
+   "label": "Email Alerts Enabled"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-03-23 12:15:19.095180",
+ "modified_by": "Administrator",
+ "module": "Event Booking",
+ "name": "Event Booking Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Booking Admin",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
