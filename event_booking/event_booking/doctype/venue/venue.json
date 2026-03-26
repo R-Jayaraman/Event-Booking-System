@@ -3,25 +3,76 @@
  "allow_rename": 1,
  "autoname": "field:venue_name",
  "creation": "2026-03-23 12:17:07.613479",
+ "default_view": "List",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "section_break_hlbk",
-  "lft",
-  "rgt",
-  "is_group",
-  "old_parent",
-  "parent_venue",
   "venue_name",
+  "parent_venue",
+  "is_group",
   "capacity",
   "daily_rate",
-  "status",
-  "amenities"
+  "amenities",
+  "photos",
+  "is_active",
+  "amended_from",
+  "lft",
+  "rgt",
+  "old_parent"
  ],
  "fields": [
   {
    "fieldname": "section_break_hlbk",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "capacity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Capacity",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "daily_rate",
+   "fieldtype": "Currency",
+   "label": "Daily Rate",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "amenities",
+   "fieldtype": "Table",
+   "label": "Amenities",
+   "options": "Amenities"
+  },
+  {
+   "fieldname": "venue_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Venue Name",
+   "unique": 1
+  },
+  {
+   "fieldname": "photos",
+   "fieldtype": "Attach Image",
+   "label": "Venue Images"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Venue",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   },
   {
    "fieldname": "lft",
@@ -43,7 +94,6 @@
    "default": "0",
    "fieldname": "is_group",
    "fieldtype": "Check",
-   "in_list_view": 1,
    "label": "Is Group"
   },
   {
@@ -56,47 +106,16 @@
    "fieldname": "parent_venue",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
-   "in_list_view": 1,
    "label": "Parent Venue",
    "options": "Venue"
-  },
-  {
-   "fieldname": "capacity",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "Capacity"
-  },
-  {
-   "fieldname": "daily_rate",
-   "fieldtype": "Currency",
-   "label": "Daily Rate"
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "Active\nInactive"
-  },
-  {
-   "fieldname": "amenities",
-   "fieldtype": "Table",
-   "label": "Amenities",
-   "options": "Amenities"
-  },
-  {
-   "fieldname": "venue_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Venue Name",
-   "unique": 1
   }
  ],
  "grid_page_length": 50,
+ "image_field": "photos",
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-03-23 16:11:49.958669",
+ "modified": "2026-03-26 10:42:41.297619",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Venue",

@@ -1,45 +1,45 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:",
  "creation": "2026-03-23 13:19:16.073232",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "customer_and_event_details",
+  "basic_info",
+  "naming_series",
   "customer_name",
+  "customer_number",
   "customer_email",
-  "customer_phone",
-  "event_type",
+  "event_details_section",
+  "event_category",
   "venue",
-  "event_from_date",
-  "event_to_date",
+  "from_date",
+  "to_date",
   "guest_count",
   "special_requests",
-  "package_and_pricing",
+  "package_section",
   "event_package",
-  "estimated_cost",
-  "discount",
-  "negotiated_price",
-  "profit_margin",
+  "services_section",
+  "services",
+  "package_and_pricing",
+  "venue_cost",
+  "package_cost",
   "tax_amount",
   "total_amount",
-  "status_and_workflow",
+  "financial_section",
+  "discount",
+  "final_amount",
+  "profit_margin",
+  "status_and_orkflow_fields",
   "status",
   "rejection_reason",
   "cancellation_charges",
-  "assigned_front_desk",
+  "payments_section",
   "payments",
-  "total_paid",
-  "balance_due",
-  "service_providers",
   "amended_from"
  ],
  "fields": [
-  {
-   "fieldname": "customer_and_event_details",
-   "fieldtype": "Section Break",
-   "label": "Customer & Event Details"
-  },
   {
    "fieldname": "customer_name",
    "fieldtype": "Data",
@@ -49,17 +49,6 @@
    "fieldname": "customer_email",
    "fieldtype": "Data",
    "label": "Customer Email"
-  },
-  {
-   "fieldname": "customer_phone",
-   "fieldtype": "Data",
-   "label": "Customer Phone"
-  },
-  {
-   "fieldname": "event_type",
-   "fieldtype": "Link",
-   "label": "Event Type",
-   "options": "Event Category"
   },
   {
    "fieldname": "venue",
@@ -74,13 +63,13 @@
   },
   {
    "fieldname": "special_requests",
-   "fieldtype": "Long Text",
+   "fieldtype": "Small Text",
    "label": "Special Requests"
   },
   {
    "fieldname": "package_and_pricing",
    "fieldtype": "Section Break",
-   "label": "Package & Pricing"
+   "label": "Cost Section"
   },
   {
    "fieldname": "event_package",
@@ -89,67 +78,9 @@
    "options": "Event Package"
   },
   {
-   "fieldname": "estimated_cost",
-   "fieldtype": "Currency",
-   "label": "Estimated Cost"
-  },
-  {
    "fieldname": "discount",
    "fieldtype": "Currency",
-   "label": "Discount ",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "negotiated_price",
-   "fieldtype": "Currency",
-   "label": "Negotiated Price",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "profit_margin",
-   "fieldtype": "Percent",
-   "label": "Profit Margin",
-   "permlevel": 1
-  },
-  {
-   "fieldname": "tax_amount",
-   "fieldtype": "Currency",
-   "label": "Tax Amount",
-   "non_negative": 1
-  },
-  {
-   "fieldname": "total_amount",
-   "fieldtype": "Currency",
-   "label": "Total Amount"
-  },
-  {
-   "fieldname": "status_and_workflow",
-   "fieldtype": "Section Break",
-   "label": "Status & Workflow"
-  },
-  {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nPending\nApproval\nApproved\nCompleted\nRejected\nCancelled"
-  },
-  {
-   "fieldname": "rejection_reason",
-   "fieldtype": "Small Text",
-   "label": "Rejection Reason",
-   "mandatory_depends_on": "eval:doc.status==\"Rejected\""
-  },
-  {
-   "fieldname": "cancellation_charges",
-   "fieldtype": "Currency",
-   "label": "Cancellation Charges",
-   "mandatory_depends_on": "eval:doc.status==\"Cancelled\""
-  },
-  {
-   "fieldname": "assigned_front_desk",
-   "fieldtype": "Link",
-   "label": "Assigned Front Desk",
-   "options": "User"
+   "label": "DIscount"
   },
   {
    "fieldname": "payments",
@@ -158,22 +89,125 @@
    "options": "Booking Payment"
   },
   {
-   "fieldname": "total_paid",
-   "fieldtype": "Currency",
-   "label": "Total Paid",
-   "read_only": 1
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "BR-.YYYY.-.######"
   },
   {
-   "fieldname": "balance_due",
-   "fieldtype": "Currency",
-   "label": "Balance Due",
-   "read_only": 1
+   "fieldname": "customer_number",
+   "fieldtype": "Phone",
+   "label": "Customer Number"
   },
   {
-   "fieldname": "service_providers",
+   "fieldname": "status_and_orkflow_fields",
+   "fieldtype": "Section Break",
+   "label": "Status & Workflow Fields"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nPending Approval\nApproved\nCompleted\nRejected\nCancelled"
+  },
+  {
+   "depends_on": "eval:doc.status==\"Rejected\"",
+   "fieldname": "rejection_reason",
+   "fieldtype": "Small Text",
+   "label": "Rejection Reason",
+   "mandatory_depends_on": "eval:doc.status==\"Rejected\""
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "cancellation_charges",
+   "fieldtype": "Currency",
+   "label": "Cancellation Charges",
+   "mandatory_depends_on": "eval:doc.status==\"Cancelled\""
+  },
+  {
+   "fieldname": "event_category",
+   "fieldtype": "Link",
+   "label": "Event Category",
+   "options": "Event Category"
+  },
+  {
+   "fieldname": "final_amount",
+   "fieldtype": "Currency",
+   "label": "Final Amount"
+  },
+  {
+   "fieldname": "basic_info",
+   "fieldtype": "Section Break",
+   "label": "Basic Info"
+  },
+  {
+   "fieldname": "event_details_section",
+   "fieldtype": "Section Break",
+   "label": "Event Details"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date"
+  },
+  {
+   "fieldname": "package_section",
+   "fieldtype": "Section Break",
+   "label": "Package"
+  },
+  {
+   "fieldname": "venue_cost",
+   "fieldtype": "Currency",
+   "label": "Venue Cost"
+  },
+  {
+   "fieldname": "package_cost",
+   "fieldtype": "Currency",
+   "label": "Package Cost"
+  },
+  {
+   "fieldname": "tax_amount",
+   "fieldtype": "Currency",
+   "label": "Tax Amount"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount"
+  },
+  {
+   "fieldname": "financial_section",
+   "fieldtype": "Section Break",
+   "label": "Financial"
+  },
+  {
+   "fieldname": "profit_margin",
+   "fieldtype": "Percent",
+   "label": "Profit Margin"
+  },
+  {
+   "fieldname": "services_section",
+   "fieldtype": "Section Break",
+   "label": "Services"
+  },
+  {
+   "fieldname": "services",
    "fieldtype": "Table",
-   "label": "Service Providers",
-   "options": "Booking Service Provider"
+   "label": "Services",
+   "options": "Booking Service"
+  },
+  {
+   "fieldname": "payments_section",
+   "fieldtype": "Section Break",
+   "label": "Payments"
   },
   {
    "fieldname": "amended_from",
@@ -184,29 +218,21 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
-  },
-  {
-   "fieldname": "event_from_date",
-   "fieldtype": "Datetime",
-   "label": "Event From Date"
-  },
-  {
-   "fieldname": "event_to_date",
-   "fieldtype": "Datetime",
-   "label": "Event To Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-23 22:09:35.436573",
+ "modified": "2026-03-26 13:50:46.537320",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Booking Request",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -216,6 +242,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
@@ -260,5 +287,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }

@@ -1,27 +1,25 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:package_name",
  "creation": "2026-03-23 13:12:46.929014",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "package_name",
-  "total_price",
+  "event_category",
   "valid_from",
   "valid_to",
-  "status",
-  "services"
+  "is_active",
+  "services",
+  "total_price"
  ],
  "fields": [
   {
    "fieldname": "package_name",
    "fieldtype": "Data",
-   "label": "Package Name"
-  },
-  {
-   "fieldname": "total_price",
-   "fieldtype": "Currency",
-   "label": "Total Price"
+   "label": "Package Name",
+   "unique": 1
   },
   {
    "fieldname": "valid_from",
@@ -34,25 +32,40 @@
    "label": "Valid To"
   },
   {
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Active\nArchived"
+   "fieldname": "event_category",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Event Category",
+   "options": "Event Category",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_price",
+   "fieldtype": "Currency",
+   "label": "Total Price",
+   "non_negative": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
   },
   {
    "fieldname": "services",
    "fieldtype": "Table",
    "label": "Services",
-   "options": "Package Service"
+   "options": "Event Package Item"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 13:21:58.559179",
+ "modified": "2026-03-26 13:08:13.594839",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Event Package",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {

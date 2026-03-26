@@ -1,9 +1,10 @@
-# Copyright (c) 2026, Ram and contributors
-# For license information, please see license.txt
-
-# import frappe
+import frappe
 from frappe.model.document import Document
 
 
 class EventBookingSettings(Document):
-	pass
+
+    def validate(self):
+        if self.tax_percentage is not None:
+            if self.tax_percentage < 0 or self.tax_percentage > 100:
+                frappe.throw("Tax must be between 0 and 100")

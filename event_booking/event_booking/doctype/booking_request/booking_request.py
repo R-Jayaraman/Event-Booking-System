@@ -1,97 +1,179 @@
 import frappe
-from frappe import _
 from frappe.model.document import Document
-from frappe.utils import date_diff
-
+from frappe.utils import flt, getdate, date_diff, today
 
 class BookingRequest(Document):
-	def validate(self):
-		self.check_venue_availability()
 
-		if not self.is_new():
-			if self.status == "Draft" and self.rejection_reason:
-				self.rejection_reason = None
+    def validate(self):
+        self.validate_dates()
+        self.validate_category()
+        self.validate_venue_availability()
+        self.validate_max_booking_days()
+        self.validate_capacity()
+        self.validate_rejection()
+        self.validate_cancellation()
+        self.calculate_costs()
+        self.calculate_payments_summary()
 
-	def before_save(self):
-		self.calculate_amounts()
-		self.calculate_payments()
-		self.update_status()
+    def validate_dates(self):
+        if self.from_date and self.to_date:
+            if getdate(self.from_date) > getdate(self.to_date):
+                frappe.throw("From Date cannot be after To Date")
 
-	def calculate_amounts(self):
-		days = 0
-		if self.event_from_date and self.event_to_date:
-			days = max(0, date_diff(self.event_to_date, self.event_from_date) + 1)
-
-		venue_rate = frappe.db.get_value("Venue", self.venue, "daily_rate") if self.venue else 0
-		venue_rate = venue_rate or 0
-
-		package_price = (
-			frappe.db.get_value("Event Package", self.event_package, "total_price")
-			if self.event_package
-			else 0
-		)
-		package_price = package_price or 0
-
-		self.estimated_cost = (venue_rate * days) + package_price
-
-		discount = self.discount or 0
-
-		tax_rate = frappe.db.get_single_value("Event Booking Settings", "default_tax_percentage") or 0
-
-		tax_rate = tax_rate / 100
-
-		taxable_amount = max(0, self.estimated_cost - discount)
-
-		self.tax_amount = taxable_amount * tax_rate
-		self.total_amount = taxable_amount + self.tax_amount
-
-	def calculate_payments(self):
-		total_paid = 0
-
-		for row in self.payments:
-			total_paid += row.amount or 0
-
-		self.total_paid = total_paid
-		self.balance_due = (self.total_amount or 0) - total_paid
-
-		if self.total_paid > (self.total_amount or 0):
-			frappe.throw(_("Total Paid cannot exceed Total Amount"))
-
-	def update_status(self):
-		if self.balance_due == 0 and self.total_amount > 0:
-			self.status = "Completed"
-
-	def check_venue_availability(self):
-		if not self.venue or not self.event_from_date or not self.event_to_date:
-			return
-
-		clashes = frappe.db.sql(
-			"""
-            SELECT name FROM `tabBooking Request`
-            WHERE venue = %s
-            AND status IN ('Pending Approval','Approved','Completed')
-            AND name != %s
-            AND NOT (
-                event_to_date < %s OR event_from_date > %s
+    def validate_category(self):
+        if self.event_category:
+            is_group = frappe.db.get_value(
+                "Event Category",
+                self.event_category,
+                "is_group"
             )
-        """,
-			(self.venue, self.name, self.event_from_date, self.event_to_date),
-		)
+            if is_group:
+                frappe.throw("Please select a specific event type (not parent category)")
 
-		if clashes:
-			frappe.throw(_("Venue already booked for the selected dates."))
+    def get_child_venues(self):
+        venue = frappe.get_doc("Venue", self.venue)
+
+        return frappe.get_all(
+            "Venue",
+            filters={
+                "lft": [">=", venue.lft],
+                "rgt": ["<=", venue.rgt],
+                "is_group": 0
+            },
+            pluck="name"
+        )
+
+    def validate_venue_availability(self):
+        if not (self.venue and self.from_date and self.to_date):
+            return
+
+        from_date = getdate(self.from_date)
+        to_date = getdate(self.to_date)
+
+        venue_doc = frappe.get_doc("Venue", self.venue)
+        venues = self.get_child_venues() if venue_doc.is_group else [self.venue]
+
+        for v in venues:
+            conflict = frappe.db.exists("Booking Request", {
+                "venue": v,
+                "docstatus": ["!=", 2],
+                "name": ["!=", self.name],
+                "from_date": ["<=", to_date],
+                "to_date": [">=", from_date]
+            })
+
+            if conflict:
+                frappe.throw(f"Venue '{v}' is already booked for the selected dates")
+
+    def validate_max_booking_days(self):
+        if not self.from_date:
+            return
+
+        settings = frappe.get_single("Event Booking Settings")
+        max_days = settings.max_advance_booking_days or 0
+
+        booking_days = date_diff(getdate(self.from_date), getdate(today()))
+
+        if booking_days < 0:
+            frappe.throw("Booking date cannot be in the past")
+
+        if max_days and booking_days > max_days:
+            frappe.throw(f"Booking cannot be made more than {max_days} days in advance")
+
+    def validate_capacity(self):
+        if not (self.venue and self.guest_count):
+            return
+
+        venue_doc = frappe.get_doc("Venue", self.venue)
+
+        if venue_doc.is_group:
+            venues = self.get_child_venues()
+            total_capacity = sum(
+                frappe.db.get_value("Venue", v, "capacity") or 0
+                for v in venues
+            )
+        else:
+            total_capacity = frappe.db.get_value(
+                "Venue",
+                self.venue,
+                "capacity"
+            ) or 0
+
+        if self.guest_count > total_capacity:
+            frappe.throw("Guest count exceeds total venue capacity")
+
+    def validate_rejection(self):
+        if self.status == "Rejected" and not self.rejection_reason:
+            frappe.throw("Rejection reason is mandatory")
+
+    def validate_cancellation(self):
+        if self.status == "Cancelled" and not self.cancellation_charges:
+            frappe.throw("Cancellation charges must be entered")
 
 
-def get_permission_query_conditions(user):
-	if not user:
-		user = frappe.session.user
+    def calculate_costs(self):
+        venue_cost = 0
+        package_cost = 0
 
-	roles = frappe.get_roles(user)
+        if self.venue and self.from_date and self.to_date:
+            venue_doc = frappe.get_doc("Venue", self.venue)
+            venues = self.get_child_venues() if venue_doc.is_group else [self.venue]
 
-	if "Booking Admin" in roles:
-		return ""
+            from_date = getdate(self.from_date)
+            to_date = getdate(self.to_date)
+            days = (to_date - from_date).days + 1
 
-	if "Front Desk" in roles:
-		return f"`tabBooking Request`.assigned_front_desk = '{user}'"
+            for v in venues:
+                rate = frappe.db.get_value("Venue", v, "daily_rate") or 0
+                venue_cost += flt(rate) * days
 
-	return ""
+        if self.event_package:
+            package_cost = frappe.db.get_value(
+                "Event Package",
+                self.event_package,
+                "total_price"
+            ) or 0
+
+        self.venue_cost = venue_cost
+        self.package_cost = package_cost
+
+        settings = frappe.get_single("Event Booking Settings")
+        tax_percent = settings.default_tax or 0
+
+        subtotal = venue_cost + package_cost
+        self.tax_amount = subtotal * (tax_percent / 100)
+        self.total_amount = subtotal + self.tax_amount
+
+        discount = self.discount or 0
+        self.final_amount = self.total_amount - discount
+
+    def calculate_payments_summary(self):
+        total_paid = sum(flt(p.amount) for p in self.payments)
+
+        self.total_paid = total_paid
+        self.balance_amount = self.final_amount - total_paid
+
+
+@frappe.whitelist()
+def get_package_services(package):
+    items = frappe.get_all(
+        "Event Package Item",
+        filters={"parent": package},
+        fields=["service_provider", "amount"]
+    )
+
+    result = []
+    for item in items:
+        provider_type = frappe.db.get_value(
+            "Service Provider",
+            item.service_provider,
+            "provider_type"
+        )
+
+        result.append({
+            "service_provider": item.service_provider,
+            "service_type": provider_type,
+            "cost": item.amount
+        })
+
+    return result

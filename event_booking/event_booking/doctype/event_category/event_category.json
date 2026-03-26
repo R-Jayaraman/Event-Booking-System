@@ -1,29 +1,26 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:category_name",
  "creation": "2026-03-23 12:34:20.510928",
+ "default_view": "Tree",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "lft",
   "rgt",
-  "is_group",
   "old_parent",
-  "parent_event_category",
   "category_name",
-  "description"
+  "parent_event_category",
+  "is_group"
  ],
  "fields": [
   {
    "fieldname": "category_name",
    "fieldtype": "Data",
-   "label": "Category Name"
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Description"
+   "label": "Category Name",
+   "unique": 1
   },
   {
    "fieldname": "lft",
@@ -65,10 +62,11 @@
  "index_web_pages_for_search": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2026-03-23 12:39:08.950892",
+ "modified": "2026-03-26 00:41:36.301128",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Event Category",
+ "naming_rule": "By fieldname",
  "nsm_parent_field": "parent_event_category",
  "owner": "Administrator",
  "permissions": [

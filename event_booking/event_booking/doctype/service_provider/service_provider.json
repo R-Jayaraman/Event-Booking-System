@@ -2,17 +2,19 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "field:provider_name",
- "creation": "2026-03-23 12:59:02.049753",
+ "creation": "2026-03-26 00:47:28.947686",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "provider_name",
   "provider_type",
-  "contact_number",
+  "contact_person",
+  "phone",
   "email",
-  "rationg",
+  "rating",
   "daily_rate",
-  "is_internal"
+  "is_internal",
+  "is_active"
  ],
  "fields": [
   {
@@ -20,19 +22,24 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Provider Name",
+   "reqd": 1,
    "unique": 1
   },
   {
    "fieldname": "provider_type",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "label": "Provider Type",
-   "options": "Catering\nDecoration\nPhotography\nOthers"
+   "options": "Catering\nDecoration\nPhotography"
   },
   {
-   "fieldname": "contact_number",
+   "fieldname": "contact_person",
+   "fieldtype": "Data",
+   "label": "Contact Person"
+  },
+  {
+   "fieldname": "phone",
    "fieldtype": "Phone",
-   "label": "Contact Number"
+   "label": "Phone"
   },
   {
    "fieldname": "email",
@@ -40,27 +47,33 @@
    "label": "Email"
   },
   {
-   "fieldname": "rationg",
+   "fieldname": "rating",
    "fieldtype": "Rating",
-   "in_list_view": 1,
-   "label": "Rationg"
+   "label": "Rating"
   },
   {
    "fieldname": "daily_rate",
    "fieldtype": "Currency",
-   "label": "Daily Rate"
+   "label": "Daily Rate",
+   "non_negative": 1
   },
   {
    "default": "0",
    "fieldname": "is_internal",
    "fieldtype": "Check",
    "label": "Is Internal"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-23 16:11:15.525584",
+ "modified": "2026-03-26 10:43:54.118744",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Service Provider",
