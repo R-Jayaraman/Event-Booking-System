@@ -1,0 +1,31 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.status == \"Pending\"",
+ "creation": "2026-03-23 18:10:46.501762",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Booking Request",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Dear {{ doc.customer_name }},\n\nYour booking request for {{ doc.venue }} has been received and is pending approval.\n\nEvent Date: {{ doc.event_date_from }} to {{ doc.event_date_to }}\n\nWe will notify you once it is approved.\n\nThank you.",
+ "message_type": "Markdown",
+ "modified": "2026-03-30 17:43:50.730966",
+ "modified_by": "Administrator",
+ "module": "Event Booking",
+ "name": "Booking Submitted",
+ "owner": "Administrator",
+ "recipients": [
+  {}
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "BookMyVenue",
+ "sender_email": "jayaramanoffl@gmail.com",
+ "subject": "Booking Request Received - {{ doc.name }}",
+ "value_changed": "status"
+}

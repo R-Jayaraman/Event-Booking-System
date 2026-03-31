@@ -1,0 +1,1 @@
+New booking {{ doc.name }} requires your approval.

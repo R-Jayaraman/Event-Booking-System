@@ -1,0 +1,1 @@
+Reminder: Event {{ doc.name }} is in 3 days.

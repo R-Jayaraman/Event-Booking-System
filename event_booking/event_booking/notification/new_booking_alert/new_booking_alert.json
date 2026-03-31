@@ -1,0 +1,31 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "System Notification",
+ "condition": "doc.status == \"Pending Approval\"",
+ "creation": "2026-03-26 18:41:31.998668",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Booking Request",
+ "enabled": 1,
+ "event": "Save",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "New booking {{ doc.name }} requires your approval.",
+ "message_type": "Markdown",
+ "modified": "2026-03-30 17:44:09.936393",
+ "modified_by": "Administrator",
+ "module": "Event Booking",
+ "name": "New Booking Alert",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "owner",
+   "receiver_by_role": "Booking Manager"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "subject": "New Booking {{ doc.name }} Needs Approval"
+}

@@ -1,0 +1,33 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.status == \"Rejected\" and doc.rejection_reason",
+ "creation": "2026-03-30 15:41:17.801297",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Booking Request",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<div style=\"font-family: Arial; line-height: 1.6;\">\n    <h3 style=\"color:red;\">Booking Rejected</h3>\n\n    <p>Dear {{ doc.customer_name }},</p>\n\n    <p>We regret to inform you that your booking <b>{{ doc.name }}</b> has been rejected.</p>\n\n    {% set d = frappe.get_doc(doc.doctype, doc.name) %}\n\n    <p>\n        <b>Reason:</b><br>\n        {{ d.rejection_reason or \"Not provided\" }}\n    </p>\n\n    <p>You may update your request and resubmit it.</p>\n\n    <br>\n    <p>Thank you,<br>BookMyVenue Team</p>\n</div>",
+ "message_type": "Markdown",
+ "modified": "2026-03-30 18:06:31.994809",
+ "modified_by": "Administrator",
+ "module": "Event Booking",
+ "name": "Booking Rejected Email",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "customer_email"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "BookMyVenue",
+ "sender_email": "jayaramanoffl@gmail.com",
+ "subject": "Booking Rejected: {{ doc.name }}",
+ "value_changed": "status"
+}

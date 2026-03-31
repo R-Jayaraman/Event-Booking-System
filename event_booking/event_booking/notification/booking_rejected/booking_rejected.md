@@ -1,0 +1,1 @@
+Your booking {{ doc.name }} was rejected.

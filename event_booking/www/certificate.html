@@ -1,0 +1,18 @@
+<h2>Certificate Verification</h2>
+
+{% if data %}
+
+    <p><b>Name:</b> {{ data.customer_name }}</p>
+    <p><b>Event:</b> {{ data.event_category }}</p>
+    <p><b>Date:</b> {{ data.from_date }}</p>
+
+    <img src="{{ data.qr_code }}" width="100">
+    <p>ID: {{ data.certificate_id }}</p>
+
+    <p style="color:green;">Valid Certificate ✅</p>
+
+{% else %}
+
+    <p style="color:red;">Invalid Certificate ❌</p>
+
+{% endif %}

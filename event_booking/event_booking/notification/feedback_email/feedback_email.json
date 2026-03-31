@@ -1,0 +1,33 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.status == \"Completed\"",
+ "creation": "2026-03-30 18:40:25.867043",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Booking Request",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<div style=\"font-family: Arial; line-height: 1.6;\">\n\n    <h3>Thank You for Your Event</h3>\n\n    <p>Dear {{ doc.customer_name or \"Customer\" }},</p>\n\n    <p>We hope your event <b>{{ doc.name }}</b> was a great success!</p>\n\n    <p>We would love to hear your feedback about your experience.</p>\n\n    <p>Your feedback helps us improve our services.</p>\n\n    <br>\n    <p>Thank you for choosing us.</p>\n\n    <br>\n    <p>Warm regards,<br><b>BookMyVenue Team</b></p>\n\n</div>",
+ "message_type": "Markdown",
+ "modified": "2026-03-30 18:40:25.867043",
+ "modified_by": "Administrator",
+ "module": "Event Booking",
+ "name": "Feedback Email",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "customer_email"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "BookMyVenue",
+ "sender_email": "jayaramanoffl@gmail.com",
+ "subject": "We Value Your Feedback: {{ doc.name }}",
+ "value_changed": "status"
+}

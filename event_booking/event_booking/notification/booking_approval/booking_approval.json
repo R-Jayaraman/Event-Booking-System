@@ -1,0 +1,33 @@
+{
+ "attach_files": "",
+ "attach_print": 0,
+ "channel": "Email",
+ "condition": "doc.status==\"Approved\"\n",
+ "creation": "2026-03-30 15:32:39.128199",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Booking Request",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "<div style=\"font-family: Arial; line-height: 1.6;\">\n    <h3>Booking Confirmed</h3>\n\n    <p>Dear {{ doc.customer_name }},</p>\n\n    <p>Your booking <b>{{ doc.name }}</b> has been <b style=\"color:green;\">approved</b>.</p>\n\n    <p>\n        <b>Venue:</b> {{ doc.venue }}<br>\n        <b>Event Date:</b> {{ doc.from_date }} to {{ doc.to_date }}<br>\n        <b>Total Amount:</b> {{ doc.final_amount }}\n    </p>\n\n    <p>Please proceed with the payment to confirm your booking.</p>\n\n    <br>\n    <p>We look forward to hosting your event!</p>\n\n    <br>\n    <p>Thank you,<br>BookMyVenue Team</p>\n</div>\n",
+ "message_type": "Markdown",
+ "modified": "2026-03-30 15:35:13.207800",
+ "modified_by": "Administrator",
+ "module": "Event Booking",
+ "name": "Booking Approval",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "customer_email"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "sender": "BookMyVenue",
+ "sender_email": "jayaramanoffl@gmail.com",
+ "subject": "Booking Confirmed: {{ doc.name }}",
+ "value_changed": "status"
+}

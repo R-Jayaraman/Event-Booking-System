@@ -1,0 +1,1 @@
+Booking {{ doc.name }} has been cancelled.
