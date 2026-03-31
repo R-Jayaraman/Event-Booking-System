@@ -18,7 +18,7 @@ frappe.ui.form.on('Booking Request', {
         frm.set_query("event_package", function () {
             return {
                 filters: {
-                    category: frm.doc.event_category
+                    event_category: frm.doc.event_category
                 }
             };
         });

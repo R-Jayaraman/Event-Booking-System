@@ -112,6 +112,7 @@ class BookingRequest(Document):
 
 
     def calculate_costs(self):
+
         venue_cost = 0
         package_cost = 0
 
@@ -137,15 +138,25 @@ class BookingRequest(Document):
         self.venue_cost = venue_cost
         self.package_cost = package_cost
 
+        subtotal = venue_cost + package_cost
+
+        profit_margin = self.profit_margin or 0
+        profit_amount = subtotal * (profit_margin / 100)
+
+        self.profit_amount = profit_amount
+
         settings = frappe.get_single("Event Booking Settings")
         tax_percent = settings.default_tax or 0
 
-        subtotal = venue_cost + package_cost
-        self.tax_amount = subtotal * (tax_percent / 100)
-        self.total_amount = subtotal + self.tax_amount
+        tax_amount = subtotal * (tax_percent / 100)
+        self.tax_amount = tax_amount
+
+        total_amount = subtotal + profit_amount + tax_amount
+        self.total_amount = total_amount
 
         discount = self.discount or 0
-        self.final_amount = self.total_amount - discount
+        final_amount = total_amount - discount
+        self.final_amount = final_amount
 
     def calculate_payments_summary(self):
         total_paid = sum(flt(p.amount) for p in self.payments)

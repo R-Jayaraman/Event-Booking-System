@@ -27,6 +27,7 @@
   "package_cost",
   "tax_amount",
   "total_amount",
+  "profit_amount",
   "financial_section",
   "discount",
   "final_amount",
@@ -37,7 +38,10 @@
   "cancellation_charges",
   "payments_section",
   "payments",
-  "amended_from"
+  "amended_from",
+  "section_break_fznk",
+  "certificate_id",
+  "qr_code"
  ],
  "fields": [
   {
@@ -48,7 +52,8 @@
   {
    "fieldname": "customer_email",
    "fieldtype": "Data",
-   "label": "Customer Email"
+   "label": "Customer Email",
+   "options": "Email"
   },
   {
    "fieldname": "venue",
@@ -136,7 +141,8 @@
   {
    "fieldname": "final_amount",
    "fieldtype": "Currency",
-   "label": "Final Amount"
+   "label": "Final Amount",
+   "read_only": 1
   },
   {
    "fieldname": "basic_info",
@@ -166,17 +172,20 @@
   {
    "fieldname": "venue_cost",
    "fieldtype": "Currency",
-   "label": "Venue Cost"
+   "label": "Venue Cost",
+   "read_only": 1
   },
   {
    "fieldname": "package_cost",
    "fieldtype": "Currency",
-   "label": "Package Cost"
+   "label": "Package Cost",
+   "read_only": 1
   },
   {
    "fieldname": "tax_amount",
    "fieldtype": "Currency",
-   "label": "Tax Amount"
+   "label": "Tax Amount",
+   "read_only": 1
   },
   {
    "fieldname": "total_amount",
@@ -191,7 +200,8 @@
   {
    "fieldname": "profit_margin",
    "fieldtype": "Percent",
-   "label": "Profit Margin"
+   "label": "Profit Margin",
+   "permlevel": 1
   },
   {
    "fieldname": "services_section",
@@ -218,13 +228,34 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "section_break_fznk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "certificate_id",
+   "fieldtype": "Data",
+   "label": "Certificate ID",
+   "unique": 1
+  },
+  {
+   "fieldname": "qr_code",
+   "fieldtype": "Attach Image",
+   "label": "QR Code"
+  },
+  {
+   "fieldname": "profit_amount",
+   "fieldtype": "Currency",
+   "label": "Profit Amount",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-26 13:50:46.537320",
+ "modified": "2026-03-31 19:17:20.983809",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Booking Request",
@@ -260,7 +291,8 @@
    "write": 1
   },
   {
-   "create": 1,
+   "amend": 1,
+   "cancel": 1,
    "email": 1,
    "export": 1,
    "print": 1,
@@ -268,6 +300,7 @@
    "report": 1,
    "role": "Booking Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
