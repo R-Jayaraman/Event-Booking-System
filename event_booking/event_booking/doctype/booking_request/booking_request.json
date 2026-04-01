@@ -13,32 +13,31 @@
   "customer_email",
   "event_details_section",
   "event_category",
+  "event_package",
   "venue",
   "from_date",
   "to_date",
   "guest_count",
   "special_requests",
-  "package_section",
-  "event_package",
   "services_section",
   "services",
   "package_and_pricing",
   "venue_cost",
   "package_cost",
+  "profit_margin",
+  "profit_amount",
   "tax_amount",
   "total_amount",
-  "profit_amount",
-  "financial_section",
+  "discount_and_final",
   "discount",
   "final_amount",
-  "profit_margin",
+  "settled_amount",
+  "amended_from",
+  "progress",
   "status_and_orkflow_fields",
   "status",
   "rejection_reason",
   "cancellation_charges",
-  "payments_section",
-  "payments",
-  "amended_from",
   "section_break_fznk",
   "certificate_id",
   "qr_code"
@@ -90,12 +89,6 @@
    "label": "DIscount"
   },
   {
-   "fieldname": "payments",
-   "fieldtype": "Table",
-   "label": "Payments",
-   "options": "Booking Payment"
-  },
-  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "hidden": 1,
@@ -105,7 +98,7 @@
   {
    "fetch_from": "customer_name.customer_number",
    "fieldname": "customer_number",
-   "fieldtype": "Phone",
+   "fieldtype": "Data",
    "label": "Customer Number"
   },
   {
@@ -167,11 +160,6 @@
    "label": "To Date"
   },
   {
-   "fieldname": "package_section",
-   "fieldtype": "Section Break",
-   "label": "Package"
-  },
-  {
    "fetch_from": "venue.daily_rate",
    "fieldname": "venue_cost",
    "fieldtype": "Currency",
@@ -195,11 +183,6 @@
    "label": "Total Amount"
   },
   {
-   "fieldname": "financial_section",
-   "fieldtype": "Section Break",
-   "label": "Financial"
-  },
-  {
    "fieldname": "services_section",
    "fieldtype": "Section Break",
    "label": "Services"
@@ -209,11 +192,6 @@
    "fieldtype": "Table",
    "label": "Services",
    "options": "Booking Service"
-  },
-  {
-   "fieldname": "payments_section",
-   "fieldtype": "Section Break",
-   "label": "Payments"
   },
   {
    "fieldname": "amended_from",
@@ -251,13 +229,32 @@
    "fieldname": "profit_margin",
    "fieldtype": "Percent",
    "label": "Profit Margin"
+  },
+  {
+   "fieldname": "discount_and_final",
+   "fieldtype": "Section Break",
+   "label": "Discount & Final"
+  },
+  {
+   "fieldname": "settled_amount",
+   "fieldtype": "Currency",
+   "label": "Settled Amount",
+   "read_only": 1
+  },
+  {
+   "default": "Unpaid",
+   "fieldname": "progress",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Progress",
+   "options": "Paid\nUnpaid\nPartially Paid"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-01 08:55:27.680739",
+ "modified": "2026-04-01 16:13:29.526450",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Booking Request",

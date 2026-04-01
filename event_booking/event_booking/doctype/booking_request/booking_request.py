@@ -112,12 +112,12 @@ class BookingRequest(Document):
         if self.status == "Cancelled" and not self.cancellation_charges:
             frappe.throw("Cancellation charges must be entered")
 
-
     def calculate_costs(self):
 
         venue_cost = 0
         package_cost = 0
 
+        # Venue cost
         if self.venue and self.from_date and self.to_date:
             venue_doc = frappe.get_doc("Venue", self.venue)
             venues = self.get_child_venues() if venue_doc.is_group else [self.venue]
@@ -130,6 +130,7 @@ class BookingRequest(Document):
                 rate = frappe.db.get_value("Venue", v, "daily_rate") or 0
                 venue_cost += flt(rate) * days
 
+        # Package cost
         if self.event_package:
             package_cost = frappe.db.get_value(
                 "Event Package",
@@ -137,35 +138,46 @@ class BookingRequest(Document):
                 "total_price"
             ) or 0
 
-        self.venue_cost = venue_cost
-        self.package_cost = package_cost
+        self.venue_cost = flt(venue_cost)
+        self.package_cost = flt(package_cost)
 
-        subtotal = venue_cost + package_cost
+        subtotal = flt(venue_cost) + flt(package_cost)
 
-        profit_margin = self.profit_margin or 0
+        # Profit
+        profit_margin = flt(self.profit_margin)
         profit_amount = subtotal * (profit_margin / 100)
+        self.profit_amount = flt(profit_amount)
 
-        self.profit_amount = profit_amount
-
+        # Tax
         settings = frappe.get_single("Event Booking Settings")
-        tax_percent = settings.default_tax or 0
+        tax_percent = flt(settings.default_tax)
 
         tax_amount = subtotal * (tax_percent / 100)
-        self.tax_amount = tax_amount
+        self.tax_amount = flt(tax_amount)
 
+        # Total
         total_amount = subtotal + profit_amount + tax_amount
-        self.total_amount = total_amount
+        self.total_amount = flt(total_amount)
 
-        discount = self.discount or 0
+        # Final
+        discount = flt(self.discount)
         final_amount = total_amount - discount
-        self.final_amount = final_amount
+        self.final_amount = flt(final_amount)
 
     def calculate_payments_summary(self):
-        total_paid = sum(flt(p.amount) for p in self.payments)
+        payments = frappe.get_all(
+            "Booking Payment",
+            filters={
+                "booking": self.name,
+                "docstatus": 1
+            },
+            fields=["paid_amount"]
+        )
 
-        self.total_paid = total_paid
-        self.balance_amount = self.final_amount - total_paid
+        total_paid = sum(flt(p.get("paid_amount")) for p in payments)
 
+        self.total_paid = flt(total_paid)
+        self.balance_amount = flt(self.final_amount) - total_paid
 
 @frappe.whitelist()
 def get_package_services(package):
