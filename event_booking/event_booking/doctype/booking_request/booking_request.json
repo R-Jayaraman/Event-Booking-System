@@ -46,10 +46,12 @@
  "fields": [
   {
    "fieldname": "customer_name",
-   "fieldtype": "Data",
-   "label": "Customer Name"
+   "fieldtype": "Link",
+   "label": "Customer Name",
+   "options": "Customer Details"
   },
   {
+   "fetch_from": "customer_name.customer_email",
    "fieldname": "customer_email",
    "fieldtype": "Data",
    "label": "Customer Email",
@@ -101,6 +103,7 @@
    "options": "BR-.YYYY.-.######"
   },
   {
+   "fetch_from": "customer_name.customer_number",
    "fieldname": "customer_number",
    "fieldtype": "Phone",
    "label": "Customer Number"
@@ -141,8 +144,7 @@
   {
    "fieldname": "final_amount",
    "fieldtype": "Currency",
-   "label": "Final Amount",
-   "read_only": 1
+   "label": "Final Amount"
   },
   {
    "fieldname": "basic_info",
@@ -170,10 +172,10 @@
    "label": "Package"
   },
   {
+   "fetch_from": "venue.daily_rate",
    "fieldname": "venue_cost",
    "fieldtype": "Currency",
-   "label": "Venue Cost",
-   "read_only": 1
+   "label": "Venue Cost"
   },
   {
    "fieldname": "package_cost",
@@ -196,12 +198,6 @@
    "fieldname": "financial_section",
    "fieldtype": "Section Break",
    "label": "Financial"
-  },
-  {
-   "fieldname": "profit_margin",
-   "fieldtype": "Percent",
-   "label": "Profit Margin",
-   "permlevel": 1
   },
   {
    "fieldname": "services_section",
@@ -248,14 +244,20 @@
    "fieldname": "profit_amount",
    "fieldtype": "Currency",
    "label": "Profit Amount",
+   "permlevel": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "profit_margin",
+   "fieldtype": "Percent",
+   "label": "Profit Margin"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-03-31 19:17:20.983809",
+ "modified": "2026-04-01 08:55:27.680739",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Booking Request",

@@ -1,3 +1,5 @@
+let global_tax = 0;
+
 frappe.ui.form.on('Booking Request', {
 
     onload: function(frm) {
@@ -10,8 +12,56 @@ frappe.ui.form.on('Booking Request', {
             };
         });
 
+        frappe.call({
+            method: "frappe.client.get_value",
+            args: {
+                doctype: "Event Booking Settings",
+                filters: {},
+                fieldname: "default_tax"
+            },
+            callback: function(r) {
+                global_tax = r.message.default_tax || 0;
+                calculate_cost(frm);
+            }
+        });
     },
 
+    refresh: function(frm) {
+        calculate_cost(frm);
+    },
+
+    before_workflow_action: function(frm) {
+
+        if (frm.selected_workflow_action === "Reject") {
+
+            frappe.validated = false;
+
+            frappe.prompt(
+                [
+                    {
+                        fieldname: 'rejection_reason',
+                        label: 'Reason for Rejection',
+                        fieldtype: 'Small Text',
+                        reqd: 1
+                    }
+                ],
+                function(values) {
+
+                    frm.set_value('rejection_reason', values.rejection_reason);
+
+                    frm.save().then(() => {
+
+                        frappe.validated = true;
+
+                        frm.page.btn_primary.trigger("click");
+                    });
+
+                },
+                  ('Enter Rejection Reason'),
+                  ('Submit')
+            );
+        }
+    },
 
     event_category: function(frm) {
 
@@ -32,16 +82,15 @@ frappe.ui.form.on('Booking Request', {
         if (frm.doc.event_package) {
             fetch_package_services(frm);
             fetch_package_cost(frm);
-            calculate_cost(frm);
         }
     },
 
-    venue: calculate_cost,
-    from_date: calculate_cost,
-    to_date: calculate_cost,
-    discount: calculate_cost,
-    package_cost: calculate_cost
+    venue_cost: calculate_cost,
+    package_cost: calculate_cost,
+    profit_margin: calculate_cost,
+    discount: calculate_cost
 });
+
 
 function fetch_package_services(frm) {
     frappe.call({
@@ -67,6 +116,7 @@ function fetch_package_services(frm) {
     });
 }
 
+
 function fetch_package_cost(frm) {
     frappe.call({
         method: "frappe.client.get_value",
@@ -78,48 +128,37 @@ function fetch_package_cost(frm) {
         callback: function(r) {
             if (r.message) {
                 frm.set_value("package_cost", r.message.total_price);
+                calculate_cost(frm);
             }
         }
     });
 }
 
+
 function calculate_cost(frm) {
 
-    if (!frm.doc.venue || !frm.doc.from_date || !frm.doc.to_date) return;
+    let venue_cost = flt(frm.doc.venue_cost);
+    let package_cost = flt(frm.doc.package_cost);
 
-    frappe.call({
-        method: "frappe.client.get_value",
-        args: {
-            doctype: "Venue",
-            filters: { name: frm.doc.venue },
-            fieldname: "daily_rate"
-        },
-        callback: function(r) {
+    let subtotal = venue_cost + package_cost;
 
-            let rate = r.message.daily_rate || 0;
+    let profit_margin = flt(frm.doc.profit_margin);
+    let profit_amount = subtotal * (profit_margin / 100);
 
-            let from_date = new Date(frm.doc.from_date);
-            let to_date = new Date(frm.doc.to_date);
+    let tax_amount = subtotal * (global_tax / 100);
 
-            let days = ((to_date - from_date) / (1000 * 60 * 60 * 24)) + 1;
+    let total_amount = subtotal + profit_amount + tax_amount;
 
-            let venue_cost = rate * days;
-            let package_cost = frm.doc.package_cost || 0;
+    let discount = flt(frm.doc.discount);
+    let final_amount = total_amount - discount;
 
-            let subtotal = venue_cost + package_cost;
+    frm.set_value("profit_amount", profit_amount);
+    frm.set_value("tax_amount", tax_amount);
+    frm.set_value("total_amount", total_amount);
+    frm.set_value("final_amount", final_amount);
 
-            let tax_percent = 18;
-            let tax_amount = subtotal * (tax_percent / 100);
-
-            let total_amount = subtotal + tax_amount;
-
-            let discount = frm.doc.discount || 0;
-            let final_amount = total_amount - discount;
-
-            frm.set_value("venue_cost", venue_cost);
-            frm.set_value("tax_amount", tax_amount);
-            frm.set_value("total_amount", total_amount);
-            frm.set_value("final_amount", final_amount);
-        }
-    });
+    frm.refresh_field("profit_amount");
+    frm.refresh_field("tax_amount");
+    frm.refresh_field("total_amount");
+    frm.refresh_field("final_amount");
 }

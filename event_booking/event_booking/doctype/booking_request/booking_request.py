@@ -11,9 +11,11 @@ class BookingRequest(Document):
         self.validate_max_booking_days()
         self.validate_capacity()
         self.validate_rejection()
-        self.validate_cancellation()
         self.calculate_costs()
         self.calculate_payments_summary()
+
+    def on_cancel(self):
+        self.validate_cancellation()
 
     def validate_dates(self):
         if self.from_date and self.to_date:
