@@ -93,7 +93,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Naming Series",
-   "options": "BR-.YYYY.-.######"
+   "options": "BR-.YYYY.-.#####"
   },
   {
    "fetch_from": "customer_name.customer_number",
@@ -211,12 +211,14 @@
    "fieldname": "certificate_id",
    "fieldtype": "Data",
    "label": "Certificate ID",
+   "read_only": 1,
    "unique": 1
   },
   {
    "fieldname": "qr_code",
    "fieldtype": "Attach Image",
-   "label": "QR Code"
+   "label": "QR Code",
+   "read_only": 1
   },
   {
    "fieldname": "profit_amount",
@@ -254,7 +256,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-01 16:13:29.526450",
+ "modified": "2026-04-03 19:47:24.929607",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Booking Request",

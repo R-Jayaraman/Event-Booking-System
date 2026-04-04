@@ -1,11 +1,12 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "hash",
+ "autoname": "naming_series:",
  "creation": "2026-04-01 10:56:24.997240",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "naming_series",
   "customer_name",
   "customer_number",
   "customer_email"
@@ -25,16 +26,23 @@
    "fieldname": "customer_email",
    "fieldtype": "Data",
    "label": "Customer Email"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "CUST-.YYYY.-.#####"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-01 11:01:19.136802",
+ "modified": "2026-04-01 17:06:10.514997",
  "modified_by": "Administrator",
  "module": "Event Booking",
  "name": "Customer Details",
- "naming_rule": "Random",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
