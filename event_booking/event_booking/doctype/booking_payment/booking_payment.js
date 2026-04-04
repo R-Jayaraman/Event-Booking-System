@@ -13,3 +13,4 @@ frappe.ui.form.on("Booking Payment", {
         }
     }
 });
+
