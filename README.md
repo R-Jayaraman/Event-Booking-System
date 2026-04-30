@@ -1,6 +1,6 @@
 ### Event Booking
 
-Event Booking Management System
+Event Booking System
 
 ### Installation
 

@@ -1,9 +1,9 @@
 [project]
 name = "event_booking"
 authors = [
-    { name = "Ram", email = "ramoffl@gmail.com"}
+    { name = "ram", email = "ram@gmail.com"}
 ]
-description = "Event Booking Management System"
+description = "Event Booking System"
 requires-python = ">=3.10"
 readme = "README.md"
 dynamic = ["version"]
@@ -18,6 +18,10 @@ build-backend = "flit_core.buildapi"
 # These dependencies are only installed when developer mode is enabled
 [tool.bench.dev-dependencies]
 # package_name = "~=1.1.0"
+
+# These apt dependencies will be installed from Ubuntu repositories when you host your app on Frappe Cloud
+[deploy.dependencies.apt]
+packages = []
 
 [tool.ruff]
 line-length = 110

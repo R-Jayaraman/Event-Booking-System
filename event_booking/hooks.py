@@ -1,8 +1,8 @@
 app_name = "event_booking"
 app_title = "Event Booking"
-app_publisher = "Ram"
-app_description = "Event Booking Management System"
-app_email = "ramoffl@gmail.com"
+app_publisher = "ram"
+app_description = "Event Booking System"
+app_email = "ram@gmail.com"
 app_license = "mit"
 
 # Apps
@@ -246,3 +246,4 @@ app_license = "mit"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
+
