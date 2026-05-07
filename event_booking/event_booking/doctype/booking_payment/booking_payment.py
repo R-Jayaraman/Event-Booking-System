@@ -2,7 +2,9 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import today
 
+
 class BookingPayment(Document):
+
     # def validate(self):
     #     if not self.payment_date:
     #         self.payment_date = today()
@@ -11,18 +13,18 @@ class BookingPayment(Document):
         self.update_booking_totals()
 
     # def on_cancel(self):
-    #     self.update_booking_totals(self.booking)
-
+    #     self.update_booking_totals()
 
     def update_booking_totals(self):
 
-    # get current settled amount directly
+        # get current settled amount
         current_settled = frappe.db.get_value(
             "Booking Request",
             self.booking,
             "settled_amount"
         ) or 0
 
+        # add new payment
         new_settled = current_settled + self.paid_amount
 
         # update settled amount
@@ -40,18 +42,25 @@ class BookingPayment(Document):
             "final_amount"
         ) or 0
 
+        # calculate balance
+        balance_amount = final_amount - new_settled
+
         # decide progress
         if new_settled >= final_amount:
             progress = "Paid"
+
         elif new_settled > 0:
             progress = "Partially Paid"
+
         else:
             progress = "Unpaid"
 
-        # update progress
+        # update booking request
         frappe.db.set_value(
             "Booking Request",
             self.booking,
-            "progress",
-            progress
+            {
+                "settled_amount": new_settled,
+                "progress": progress
+            }
         )
